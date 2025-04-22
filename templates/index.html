@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Multiplichation!</title>
+        <!-- Link to CSS -->
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='style.css') }}"
+        />
+    </head>
+    <body>
+        <h1>Tables de multiplichations</h1>
+
+        <div class="container">
+            <!-- Left column - Questions -->
+            <div class="questions-column">
+                <form method="post">
+                    {% for question in questions %}
+                    <div class="question-box">
+                        <label for="answer_{{ loop.index }}"
+                            >{{ question.question_str }}</label
+                        >
+                        <input
+                            type="number"
+                            id="answer_{{ loop.index }}"
+                            name="answers"
+                            required
+                        />
+                    </div>
+                    {% endfor %}
+                    <button type="submit">Vérifier!</button>
+                </form>
+            </div>
+
+            <!-- Right column - Reward -->
+            <div class="reward-column">
+                {% if show_reward and reward_gif_url %}
+                <div class="reward-container">
+                    <h2>Bravo! 🎉</h2>
+                    <!-- Display the reward GIF -->
+                    <img
+                        src="{{ reward_gif_url }}"
+                        alt="Cute reward animation!"
+                        class="reward-gif"
+                    />
+                </div>
+                {% else %}
+                <!-- Empty placeholder for the reward space -->
+                <div class="reward-placeholder">
+                    <p>Trouve toutes les réponses pour voir une surprise!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </body>
+</html>
