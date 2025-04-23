@@ -2,22 +2,30 @@ import os  # Needed for secret key
 import random
 
 from flask import Flask, render_template, request, session
+from config import settings
 
 app = Flask(__name__)
 # A secret key is needed to use sessions
 # Use a strong, random key in production. For development, os.urandom(24) is fine.
 app.secret_key = os.urandom(24)
 
-# List of cute animal GIF URLs
-REWARD_GIFS = ["https://cataas.com/cat/gif"]
 
-
-def generate_questions(num_questions=3):
+def generate_questions(num_questions=None, multiply_by=None):
     """Generates a list of multiplication questions with answers."""
+    # Use settings if parameters are not provided
+    num_questions = num_questions if num_questions is not None else settings.num_questions
+    multiply_by = multiply_by if multiply_by is not None else settings.multiply_by
+    
     questions = []
-    for _ in range(num_questions):
-        a = random.randint(1, 10)
+    already_asked = set()
+    while len(questions) < num_questions:
+        a = multiply_by or random.randint(1, 10)
         b = random.randint(1, 10)
+        if multiply_by and random.random() < 0.5:
+            a, b = b, a
+        if (a, b) in already_asked:
+            continue
+        already_asked.add((a, b))
         correct_answer = a * b
         questions.append(
             {"a": a, "b": b, "question_str": f"{a} x {b} = ", "answer": correct_answer}
@@ -77,7 +85,7 @@ def index():
                 # Only need to set reward info, not result message
                 show_reward = True
                 reward_gif_url = random.choice(
-                    REWARD_GIFS
+                    settings.reward_gifs
                 )  # Select random GIF on success
 
         # Generate new questions for the next round regardless of correctness
@@ -106,7 +114,9 @@ def index():
 
 
 if __name__ == "__main__":
-    # Added host='0.0.0.0' to make it accessible on the network if needed
-    # Added debug=True for development ease
-    # Changed port back to default 5000 for simplicity, can be changed if needed
-    app.run(port=5000, debug=True, host="0.0.0.0")
+    # Use settings for Flask configuration
+    app.run(
+        port=settings.port,
+        debug=settings.debug,
+        host=settings.host
+    )

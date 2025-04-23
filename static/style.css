@@ -23,7 +23,7 @@ h1 {
 
 /* Questions column (left side) */
 .questions-column {
-    flex: 1;
+    flex: 0.6; /* Reduce the flex value to make it less wide */
     padding: 1em;
     background-color: #fff;
     border-radius: 8px;
@@ -49,7 +49,16 @@ input[type="number"] {
     padding: 0.8em;
     border: 1px solid #ccc;
     border-radius: 4px;
-    flex-grow: 1; /* Allow input to take remaining space */
+    width: 100px; /* Fixed width instead of flex-grow */
+    /* Remove spinner buttons */
+    -moz-appearance: textfield; /* Firefox */
+}
+
+/* Remove spinner buttons for other browsers */
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
 }
 
 button {
