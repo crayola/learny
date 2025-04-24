@@ -2,6 +2,7 @@ import os  # Needed for secret key
 import random
 
 from flask import Flask, render_template, request, session
+
 from config import settings
 
 app = Flask(__name__)
@@ -10,22 +11,40 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 
-def generate_questions(num_questions=None, multiply_by=None):
+def generate_questions(num_questions=None, multiply_by=None, division_prob=None):
     """Generates a list of multiplication questions with answers."""
     # Use settings if parameters are not provided
-    num_questions = num_questions if num_questions is not None else settings.num_questions
+    num_questions = (
+        num_questions if num_questions is not None else settings.num_questions
+    )
     multiply_by = multiply_by if multiply_by is not None else settings.multiply_by
-    
+    division_prob = (
+        division_prob if division_prob is not None else settings.division_prob
+    )
+
     questions = []
     already_asked = set()
     while len(questions) < num_questions:
         a = multiply_by or random.randint(1, 10)
         b = random.randint(1, 10)
+        if random.random() < division_prob:
+            if (a, b, "divide") in already_asked:
+                continue
+            questions.append(
+                {
+                    "a": a,
+                    "b": b,
+                    "question_str": f"{a*b} ÷ {a} = ",
+                    "answer": b,
+                }
+            )
+            already_asked.add((a, b, "divide"))
+            continue
         if multiply_by and random.random() < 0.5:
             a, b = b, a
-        if (a, b) in already_asked:
+        if (a, b, "mutiply") in already_asked:
             continue
-        already_asked.add((a, b))
+        already_asked.add((a, b, "multiply"))
         correct_answer = a * b
         questions.append(
             {"a": a, "b": b, "question_str": f"{a} x {b} = ", "answer": correct_answer}
@@ -115,8 +134,4 @@ def index():
 
 if __name__ == "__main__":
     # Use settings for Flask configuration
-    app.run(
-        port=settings.port,
-        debug=settings.debug,
-        host=settings.host
-    )
+    app.run(port=settings.port, debug=settings.debug, host=settings.host)
