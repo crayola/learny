@@ -5,7 +5,7 @@ description = "A simple web app for multiplication practice."
 authors = [
     { name = "Your Name", email = "you@example.com" },
 ] # Please update this
-requires-python = ">=3.8"
+requires-python = ">=3.13"
 dependencies = ["flask", "pydantic", "pydantic-settings"]
 
 # Optional: You can add uv-specific configurations if needed,
