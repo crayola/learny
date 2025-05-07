@@ -6,7 +6,12 @@ authors = [
     { name = "Your Name", email = "you@example.com" },
 ] # Please update this
 requires-python = ">=3.13"
-dependencies = ["flask", "pydantic", "pydantic-settings"]
+dependencies = [
+    "flask",
+    "pydantic",
+    "pydantic-settings",
+    "requests>=2.32.3",
+]
 
 # Optional: You can add uv-specific configurations if needed,
 # but often none are required for basic usage.

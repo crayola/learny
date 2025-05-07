@@ -1,3 +1,5 @@
+from typing import Callable
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -20,8 +22,14 @@ class Settings(BaseSettings):
     port: int = Field(default=5001, description="Port to run the application on")
 
     # Reward settings
-    reward_gifs: list[str] = Field(
-        default=["https://cataas.com/cat/gif"],
+    reward_gifs: list[Callable] = Field(
+        default=[
+            lambda: "https://cataas.com/cat/gif",
+            # lambda: requests.get("https://random-d.uk/api/v1/random?type=gif").json()[
+            #     "url"
+            # ],
+            # giphy key jbbnggkvU58AHYQUO02UiQNYjIzezPgv
+        ],
         description="List of cute animal GIF URLs for rewards",
     )
 

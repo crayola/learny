@@ -105,7 +105,7 @@ def index():
                 show_reward = True
                 reward_gif_url = random.choice(
                     settings.reward_gifs
-                )  # Select random GIF on success
+                )()  # Select random GIF on success
 
         # Generate new questions for the next round regardless of correctness
         questions = generate_questions()
