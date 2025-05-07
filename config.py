@@ -8,8 +8,9 @@ class Settings(BaseSettings):
     """Application settings."""
 
     # Multiplication settings
-    multiply_by: int = Field(
-        default=3, description="Default number to multiply by in questions"
+    multiply_by: list[list[int]] = Field(
+        default=[[3, 4], [3, 7]],
+        description="Default number to multiply by in questions",
     )
     num_questions: int = Field(default=3, description="Number of questions to generate")
     division_prob: float = Field(

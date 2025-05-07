@@ -25,7 +25,7 @@ def generate_questions(num_questions=None, multiply_by=None, division_prob=None)
     questions = []
     already_asked = set()
     while len(questions) < num_questions:
-        a = multiply_by or random.randint(1, 10)
+        a = random.choices(multiply_by[0], multiply_by[1])[0] or random.randint(1, 10)
         b = random.randint(1, 10)
         if random.random() < division_prob:
             if (a, b, "divide") in already_asked:
